@@ -194,14 +194,25 @@ class InputStructure():
         #print("%-20s %-15s"%("size of XTW:   ", self.XTW.shape))
         print("===============================================")
 
-    def FindTheMaxN(self):
-        self.tmp_N = []
+    def FindTheMaxN(self, HowMany:int = 1):
+        self.Neighbours = np.zeros(self.n, dtype=int)
+
         for x in range(self.n):
             cnt = 0
             for y in range(self.n):
                 if self.CopyA[x][y]>0.1:
                     cnt = cnt + 1
-            self.tmp_N.append(cnt)
+            self.Neighbours[x] = cnt
+
+        self.ArgNeighbourMax = np.argsort(self.Neighbours)
+        self.ArgNeighbourMax = np.flip(self.ArgNeighbourMax)
+
+        return self.ArgNeighbourMax[:HowMany]
+
+        
+        
+
+        
     
 
 class OutputStructure():

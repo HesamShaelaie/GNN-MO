@@ -7,16 +7,8 @@ import os
 import pickle
 import sys
 import math
-from datetime import datetime
 import random
 
-now = datetime.now()
- 
-print("now =", now)
-
-# dd/mm/YY H:M:S
-dt_string = now.strftime("%d-%m-%Y-%H-%M-%S")
-print("date and time =", dt_string)	
 
 LIMIT_ITR = 100000
 

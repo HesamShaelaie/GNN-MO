@@ -34,14 +34,7 @@ def read_data(Index):
 
     InputDt = InputStructure(Index, path_to_file, Fname, A, X, T)
 
-    print(np.shape(A))
-    tmp = np.array([127, 128, 129], dtype=np.int8)
-    InputDt.set_R(tmp)
-    InputDt.recalculate()
-    InputDt.show()
-    InputDt.FindTheMaxN()
-    InputDt.tmp_N.sort(reverse=True)
-    print(InputDt.tmp_N[0:10])
+    
 
     return InputDt
 
