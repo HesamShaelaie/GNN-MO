@@ -15,15 +15,13 @@ from matrix import compare_matrix_g
 
 
 def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False):
+    
+    OutData = OutputStructure()
 
     try:
         # Data input
         N = InputData.n
-        Srow = InputData.sr
         Lmt = InputData.Lmt
-
-        # Data result
-        OutData = OutputStructure()
 
         # Create a new model
         m = gp.Model("quadratic")
@@ -34,34 +32,34 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         Upos = m.addVar(vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Upos")
         Uneg = m.addVar(vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Uneg")
         
-        # Set objective
+        # ----------- Set objective ------------------------------------------
         obj = gp.QuadExpr()
 
-        print(np.shape(InputData.XTW))
-        print(np.shape(InputData.XT))
-
-        # Set quadratic part
-        for Pindex in range(N):
-            z = IndexMaker(N, Srow, Pindex)
-
-            for i1,j1,i2,j2 in z:
-                obj.add(InputData.XT[Pindex][0]*y[i1][j1]*y[i2][j2])
-
-        # Geting the number of quadratic term in objective function
-        OutData.NQ =obj.size()
+        for s in InputData.sr: #row
+            for k in range(InputData.yT): # column
+                for z in range(InputData.xX):
+                    for j in range(InputData.yX):
+                        obj.add(y[s][j]*y[j][z]*InputData.XT[z][k])
 
         
+        # Getting the number of quadratic term in objective function
+        OutData.NQ = obj.size()
 
         m.addConstr(obj-InputData.ObjGNN == Upos - Uneg)
 
 
         m.setObjective(Upos+Uneg , GRB.MINIMIZE)
-        m.params.NonConvex = 2
-        m.params.MIPFocus = 1
 
+        #m.params.NonConvex = 2
+        #m.params.MIPFocus = 1
+        # --------------------------------------------------------------------
+        
+        # ----------- Constraints --------------------------------------------
+        
         # Adding constraints
-
         # Constraint (1)
+
+
         for i in range(N):
             for j in range(N):
                 m.addConstr(x[i][j]*InputData.A[i][j] == y[i][j])
@@ -77,10 +75,13 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         # Constraint (3)
         m.addConstr(gp.quicksum(x[i][j] for i in range(N) for j in range(N)) <= Lmt)
 
+        
+        # --------------------------------------------------------------------
+        
         # Lazy optimization parameters
-        m.Params.LazyConstraints = 1
-        m._var = x
-
+        #m.Params.LazyConstraints = 1
+        #m._var = x
+        
         # Running the algorithm
         begin = time.time()
         m.optimize()
@@ -94,10 +95,13 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         tmp_ObjMO = tmp_ObjMO   @ tmp_ObjMO
         tmp_ObjMO = tmp_ObjMO   @ InputData.X
         tmp_ObjMO = tmp_ObjMO   @ InputData.Theta
-        tmp_ObjMO = tmp_ObjMO[InputData.sr,:]
-        tmp_ObjMO = tmp_ObjMO   @ InputData.tmp_sum
-        OutData.ObjMO = tmp_ObjMO
+        tmp_Obj = 0
 
+        for s in InputData.sr:
+            for y in range(InputData.yT):
+                tmp_Obj += tmp_ObjMO[s][y]
+        
+        OutData.ObjMO = tmp_Obj
         OutData.Obj = m.objVal
 
         OutData.CntX = 0
@@ -116,6 +120,8 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
     except AttributeError:
         #printf("%s\n", GRBgeterrormsg(env))
         print('Encountered an attribute error')
+    
+    return OutData
 
 
 if __name__ == '__main__':

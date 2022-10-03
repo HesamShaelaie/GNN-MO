@@ -1,4 +1,6 @@
+from os import uname
 from reading_pickles import InputStructure
+from reading_pickles import OutputStructure
 from reading_pickles import read_data
 from gurobi_eng import Gurobi_Solve
 from write_output import Write_Result
@@ -27,14 +29,7 @@ def Preparation(InputDt:InputStructure):
 
 def CitationProblem(InputDt:InputStructure):
 
-    #InputDt.X = np.full((InputDt.xX, InputDt.yX), 1, dtype = np.float_)
-    #InputDt.Theta = np.full((InputDt.xT, InputDt.yT), 1, dtype = np.float_)
-
-    InputDt.recalculate(K=1, Rho=1, ResetLimit=True, WithAdjustment=True)
-    
-    #InputDt.Lmt = int(InputDt.Lmt * 0.5)
-
-    ResultDt = Gurobi_Solve(InputDt)
+    ResultDt = Gurobi_Solve(InputDt, UndirectionalConstraint = True)
 
     print(ResultDt.Time)
     print("Problem solved")
@@ -46,9 +41,9 @@ def CitationProblem(InputDt:InputStructure):
 def TimeAndDate():
 
     now = datetime.now() 
-    print("now =", now)
     dt_string = now.strftime("%d-%m-%Y-%H-%M-%S")
-    print("date and time =", dt_string)	
+    print(now)
+    print(dt_string)
 
 
 
@@ -56,5 +51,20 @@ if __name__ == '__main__':
 
     TimeAndDate()
     InputDt = read_data("cora")
-    Preparation(InputDt)
-    #CitationProblem(InputDt)
+
+    #Preparation(InputDt)
+    #------------------------------------------------------------------------------------------
+    InputDt.set_R_max(5, Find_Neighbour=True)
+    #InputDt.X = np.full((InputDt.xX, InputDt.yX), 1, dtype = np.float_)
+    #InputDt.Theta = np.full((InputDt.xT, InputDt.yT), 1, dtype = np.float_)
+    #InputDt.Lmt = int(InputDt.Lmt * 0.5)
+    InputDt.recalculate()
+    #------------------------------------------------------------------------------------------
+    print(np.shape(InputDt.XT))
+    OutData = CitationProblem(InputDt)
+    #------------------------------------------------------------------------------------------
+    print(OutData.ObjMO)
+    print(OutData.Obj)
+    print(OutData.CntX )
+
+
