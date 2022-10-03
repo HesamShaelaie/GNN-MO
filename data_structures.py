@@ -96,6 +96,17 @@ class InputStructure():
     def set_R(self, tmp):
         self.sr = tmp
         self.nr = np.shape(tmp)[0]
+    
+    def set_R_max(self, HowMany: int = 1, Find_Neighbour:bool = True):
+
+        if Find_Neighbour == True:
+            tmp_R = self.FindTheMaxN(HowMany= HowMany)
+        else:
+            tmp_R = self.ArgNeighbourMax[:HowMany]
+        
+        self.sr = tmp_R
+        self.nr = HowMany
+
 
     #defualt value of the K is 2 as we got it from the original model
     def recalculate(self, K: int = 1, Rho: int = 1, ResetLimit:bool = True, WithAdjustment:bool = True):
@@ -179,6 +190,7 @@ class InputStructure():
         print("%-20s %-15s"%("size of XT:   ", self.XT.shape))
         print("%-20s %-15s"%("size of AO:   ", self.DenAO))
         print("%-20s %-15s"%("size of AK:   ", self.DenAK))
+        print("%-20s %-15s"%("size of NR:   ", self.nr))
         print("%-20s %-15s out of (%d)"%("size of CAO:   ", self.CntAO, self.n**2))
         print("%-20s %-15s out of (%d)"%("size of CAK:   ", self.CntAK, self.n**2))
         print("--------------------------------------------------")
@@ -210,10 +222,6 @@ class InputStructure():
         return self.ArgNeighbourMax[:HowMany]
 
         
-        
-
-        
-    
 
 class OutputStructure():
     
@@ -237,5 +245,5 @@ class OutputStructure():
     def SetObj(self, tmp):
         self.Obj = tmp
 
-    
 
+    

@@ -12,11 +12,16 @@ def Preparation(InputDt:InputStructure):
     InputDt.set_R(tmp)
     InputDt.recalculate()
     InputDt.show()
+
+    print("----------------------------------------")
     print(InputDt.FindTheMaxN(5))
-
     tmp_max = InputDt.FindTheMaxN(5)
-
     print(InputDt.Neighbours[tmp_max])
+    print("----------------------------------------")
+    InputDt.set_R_max(5,Find_Neighbour=False)
+    InputDt.recalculate()
+    InputDt.show()
+
     
 
 
@@ -51,6 +56,5 @@ if __name__ == '__main__':
 
     TimeAndDate()
     InputDt = read_data("cora")
-
     Preparation(InputDt)
     #CitationProblem(InputDt)
