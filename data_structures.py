@@ -2,7 +2,7 @@ import numpy as np
 
 
 class InputStructure():
-    def __init__(self, Index, Path, Fname, A, X, T) -> None:
+    def __init__(self, Index, Path, Folder, Fname, A, X, T) -> None:
         self.Index = Index
 
         self.n = np.shape(A)[0]
@@ -55,6 +55,7 @@ class InputStructure():
         self.AAXTR = {}
 
         self.Path = Path
+        self.Folder = Folder
         self.Fname = Fname
 
         self.Pos = {}

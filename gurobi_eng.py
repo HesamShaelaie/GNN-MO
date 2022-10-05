@@ -26,7 +26,7 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         # Create a new model
         m = gp.Model("quadratic")
     
-        # Variables        
+        # Variables
         x = m.addMVar(shape=(N,N), vtype=GRB.BINARY, name="x")
         y = m.addMVar(shape=(N,N), vtype=GRB.INTEGER, lb=0, name="y")
         Upos = m.addVar(vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Upos")
@@ -37,21 +37,22 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
 
         for s in InputData.sr: #row
             for k in range(InputData.yT): # column
-                for z in range(InputData.xX):
-                    for j in range(InputData.yX):
+                print("Row %-10d Clm %-10d"%(s,k))
+                for z in range(InputData.xA):
+                    for j in range(InputData.yA):
                         obj.add(y[s][j]*y[j][z]*InputData.XT[z][k])
 
         
         # Getting the number of quadratic term in objective function
         OutData.NQ = obj.size()
 
-        m.addConstr(obj-InputData.ObjGNN == Upos - Uneg)
+        m.addConstr(obj == Upos - Uneg)
 
 
         m.setObjective(Upos+Uneg , GRB.MINIMIZE)
 
-        #m.params.NonConvex = 2
-        #m.params.MIPFocus = 1
+        m.params.NonConvex = 2
+        m.params.MIPFocus = 1
         # --------------------------------------------------------------------
         
         # ----------- Constraints --------------------------------------------
@@ -79,18 +80,20 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         # --------------------------------------------------------------------
         
         # Lazy optimization parameters
-        #m.Params.LazyConstraints = 1
-        #m._var = x
+        m.Params.LazyConstraints = 1
+        m._var = x
         
         # Running the algorithm
+        print("--------------solving-----------------")
         begin = time.time()
         m.optimize()
         end = time.time()
-
         # OutData.ObjMO = 
         OutData.Time = end-begin
-        OutData.X = x.X
+        print("--------------extracting--------------")
 
+        OutData.X = x.X
+        print("--------------Computing--------------")
         tmp_ObjMO = np.copy(OutData.X)
         tmp_ObjMO = tmp_ObjMO   @ tmp_ObjMO
         tmp_ObjMO = tmp_ObjMO   @ InputData.X
@@ -103,6 +106,9 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         
         OutData.ObjMO = tmp_Obj
         OutData.Obj = m.objVal
+        print(OutData.ObjMO)
+        print("--------------EndOfComp--------------")
+        
 
         OutData.CntX = 0
         for x in range(InputData.n):

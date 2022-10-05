@@ -32,7 +32,7 @@ def read_data(Index):
     X = Info['X']
     T = Info['T']
 
-    InputDt = InputStructure(Index, path_to_file, Fname, A, X, T)
+    InputDt = InputStructure(Index, path_to_file, GNNINPUT, Fname, A, X, T)
 
     
 

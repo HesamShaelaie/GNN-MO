@@ -7,6 +7,7 @@ from write_output import Write_Result
 #from draw_graphs import Draw_Picture
 import numpy as np
 from datetime import datetime
+from SubGraph import BuldingSubProblem
 
 def Preparation(InputDt:InputStructure):
 
@@ -20,11 +21,10 @@ def Preparation(InputDt:InputStructure):
     tmp_max = InputDt.FindTheMaxN(5)
     print(InputDt.Neighbours[tmp_max])
     print("----------------------------------------")
+
     InputDt.set_R_max(5,Find_Neighbour=False)
     InputDt.recalculate()
     InputDt.show()
-
-    
 
 
 def CitationProblem(InputDt:InputStructure):
@@ -35,6 +35,7 @@ def CitationProblem(InputDt:InputStructure):
     print("Problem solved")
     
     Write_Result(InputDt, ResultDt)
+    return ResultDt
     #Draw_Picture(InputDt, ResultDt, WithOld=False, YUE= True)
 
 
@@ -50,17 +51,21 @@ def TimeAndDate():
 if __name__ == '__main__':
 
     TimeAndDate()
-    InputDt = read_data("cora")
+    InputDt = read_data("cora_1")
 
     #Preparation(InputDt)
     #------------------------------------------------------------------------------------------
-    InputDt.set_R_max(5, Find_Neighbour=True)
+    InputDt.set_R_max(1, Find_Neighbour=True)
     #InputDt.X = np.full((InputDt.xX, InputDt.yX), 1, dtype = np.float_)
     #InputDt.Theta = np.full((InputDt.xT, InputDt.yT), 1, dtype = np.float_)
-    #InputDt.Lmt = int(InputDt.Lmt * 0.5)
+    
+    
     InputDt.recalculate()
+
+    InputDt.Lmt = int(InputDt.Lmt * 0.5)
+    InputDt.show()
+
     #------------------------------------------------------------------------------------------
-    print(np.shape(InputDt.XT))
     OutData = CitationProblem(InputDt)
     #------------------------------------------------------------------------------------------
     print(OutData.ObjMO)
