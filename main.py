@@ -55,21 +55,26 @@ if __name__ == '__main__':
 
     #Preparation(InputDt)
     #------------------------------------------------------------------------------------------
+    
     InputDt.set_R_max(1, Find_Neighbour=True)
     #InputDt.X = np.full((InputDt.xX, InputDt.yX), 1, dtype = np.float_)
     #InputDt.Theta = np.full((InputDt.xT, InputDt.yT), 1, dtype = np.float_)
     
-    
     InputDt.recalculate()
 
-    InputDt.Lmt = int(InputDt.Lmt * 0.5)
+    # InputDt.Lmt = int(InputDt.Lmt * 0.2)
+    InputDt.Lmt = 2
     InputDt.show()
 
     #------------------------------------------------------------------------------------------
+
     OutData = CitationProblem(InputDt)
+
     #------------------------------------------------------------------------------------------
-    print(OutData.ObjMO)
-    print(OutData.Obj)
-    print(OutData.CntX )
+    print("GN OBJ: %10.4f"%OutData.Obj)
+    print("GN OBJ: %10.4f"%InputDt.ObjGNN)
+    print("MO OBJ: %10.4f"%OutData.ObjMO)
+    print("MO #Edge : %d"%OutData.CntX)
+    
 
 

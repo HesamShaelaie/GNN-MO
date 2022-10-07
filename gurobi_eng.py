@@ -28,7 +28,7 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
     
         # Variables
         x = m.addMVar(shape=(N,N), vtype=GRB.BINARY, name="x")
-        y = m.addMVar(shape=(N,N), vtype=GRB.INTEGER, lb=0, name="y")
+        y = m.addMVar(shape=(N,N), vtype=GRB.CONTINUOUS, lb=0, name="y")
         Upos = m.addVar(vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Upos")
         Uneg = m.addVar(vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Uneg")
         
@@ -46,7 +46,7 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         # Getting the number of quadratic term in objective function
         OutData.NQ = obj.size()
 
-        m.addConstr(obj == Upos - Uneg)
+        m.addConstr(obj - InputData.ObjGNN == Upos - Uneg)
 
 
         m.setObjective(Upos+Uneg , GRB.MINIMIZE)
@@ -80,8 +80,8 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         # --------------------------------------------------------------------
         
         # Lazy optimization parameters
-        m.Params.LazyConstraints = 1
-        m._var = x
+        #m.Params.LazyConstraints = 1
+        #m._var = x
         
         # Running the algorithm
         print("--------------solving-----------------")
@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
     InputDt = read_data("citeseer")
 
-    InputDt.Lmt = int(InputDt.Lmt*0.2)
+    InputDt.Lmt = 2
 
     #print('InputDt.Lmt:     %d'%InputDt.Lmt)
     print('InputDt.CntA:    %d'%InputDt.CntA)

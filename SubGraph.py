@@ -52,6 +52,8 @@ if __name__ == '__main__':
     InputDt.recalculate()
     InputDt.show()
 
+
+    
     path_to_file = "%s%s_%d.pkl"%(InputDt.Folder, InputDt.Index, NoN)
     out = open(path_to_file,'wb')
     tmp_dic = {'A':InputDt.A, 'X':InputDt.X , 'T':InputDt.Theta}
