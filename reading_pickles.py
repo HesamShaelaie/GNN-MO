@@ -34,7 +34,8 @@ def read_data(Index, Pos:bool = False):
 
     if Pos == True:
         P = Info['P']
-        InputDt = InputStructure(Index, path_to_file, GNNINPUT, Fname, A, X, T, P)
+        InputDt = InputStructure(Index, path_to_file, GNNINPUT, Fname, A, X, T)
+        InputDt.set_P(P)
     else:
         InputDt = InputStructure(Index, path_to_file, GNNINPUT, Fname, A, X, T)
     

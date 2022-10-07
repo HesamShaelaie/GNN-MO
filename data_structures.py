@@ -2,7 +2,7 @@ import numpy as np
 
 
 class InputStructure():
-    def __init__(self, Index, Path, Folder, Fname, A, X, T, P = False) -> None:
+    def __init__(self, Index, Path, Folder, Fname, A, X, T) -> None:
         self.Index = Index
 
         self.n = np.shape(A)[0]
@@ -57,10 +57,11 @@ class InputStructure():
         self.Path = Path
         self.Folder = Folder
         self.Fname = Fname
-
-        if P != False:
-            self.Pos = P    
         
+            
+        self.Pos = {}
+
+
         self.Lmt = -1
         self.CntAO = 0
         self.DenAO = 0.0
@@ -108,7 +109,8 @@ class InputStructure():
         self.sr = tmp_R
         self.nr = HowMany
 
-
+    def set_P(self, p):
+        self.Pos = p
     #defualt value of the K is 2 as we got it from the original model
     def recalculate(self, K: int = 1, Rho: int = 1, ResetLimit:bool = True, WithAdjustment:bool = True):
         

@@ -13,9 +13,7 @@ import pylab
 import os
 
 
-
-
-def Positioning(InputDt:InputStructure):
+def DrawingOriginal(InputDt:InputStructure, WithHub:bool = False):
 
     CurrectFolder = os.path.dirname(os.path.abspath(__file__))
     GNNPICOUT = CurrectFolder + "/GNNPICOUT/Citation"
@@ -46,26 +44,33 @@ def Positioning(InputDt:InputStructure):
     print(G.number_of_nodes())
     print(G.number_of_edges())
     
-    
+    if WithHub ==True:
+
+        NodeBlue = [x for x in range(InputDt.n) if x not in InputDt.sr]
+        NodeRed = [x for x in InputDt.sr]
+    else:
+        NodeBlue = [x for x in range(InputDt.n)]
+        NodeRed = []
 
     print("Start positioning the nodes!!!")
     
+    pp = {}
+    for x in range(InputDt.xA):
+        pp[x] = (InputDt.Pos[x][0], InputDt.Pos[x][1])
     
-    pp = nx.random_layout(G)
-    # pp = nx.circular_layout(G)
-    # pp = nx.planar_layout(G)
-    # pp = nx.spring_layout(G)
-    # pp = nx.spectral_layout(G)
-    # pp = nx.shell_layout(G)
-    #pp = nx.kamada_kawai_layout(G)
-    #pp = nx.spring_layout(G)
-    #pp = nx.fruchterman_reingold_layout(G)
-    
-    print("Start drawing the graph!!!")
     plt.figure(figsize=(20,20))
     node_options = {"node_color":"blue", "node_size": 30}
     edge_options = {"width": 0.5, "alpha": 0.5, "edge_color": "black"}
-    nx.draw_networkx_nodes(G, pp, **node_options)
+    nx.draw_networkx_nodes(G, pp, 
+    nodelist= NodeBlue,
+    node_color = ["blue" for _ in range(len(NodeBlue))],
+    node_size =[30 for _ in range(len(NodeBlue))])
+
+    nx.draw_networkx_nodes(G, pp, 
+    nodelist= NodeRed,
+    node_color = ["red" for _ in range(len(NodeRed))],
+    node_size =[60 for _ in range(len(NodeRed))])
+
     nx.draw_networkx_edges(G, pp, **edge_options)
 
     plt.savefig(FNAMEO, dpi=900)
@@ -74,29 +79,15 @@ def Positioning(InputDt:InputStructure):
     return pp
 
 
-    
-
-                
-
-
 if __name__ == '__main__':
 
-    NameOfFile = "cora"
-    InputDt = read_data(NameOfFile, Pos= False)
-    Pos = Positioning(InputDt)
-
-    tmpP = np.full((InputDt.xA, 2), 0, dtype = np.float_)
-
-    for ky in Pos.keys():
-        tmpP[ky][0]= Pos[ky][0]
-        tmpP[ky][1]= Pos[ky][1]
-
-    path_to_file = "%s%s_p.pkl"%(InputDt.Folder, InputDt.Index)
-    out = open(path_to_file,'wb')
-    tmp_dic = {'A':InputDt.A, 'X':InputDt.X , 'T':InputDt.Theta, 'P':tmpP}
+    NameOfFile = "cora_p_3"
     
-    pickle.dump(tmp_dic, out)
-    out.close()
+    InputDt = read_data(NameOfFile, Pos= True)
+    InputDt.set_R_max(3, Find_Neighbour=True)
+
+    Pos = DrawingOriginal(InputDt, WithHub = True)
+
 
 
     
