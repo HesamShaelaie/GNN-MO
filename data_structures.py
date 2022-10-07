@@ -234,6 +234,7 @@ class OutputStructure():
         self.X = any
         self.ObjMO = 0.0
         self.Time =0.0
+        self.TimeB =0.0
         self.CntX = 0
 
     def SetNumberQ(self, tmp: np.int16):

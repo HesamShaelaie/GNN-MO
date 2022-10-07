@@ -44,7 +44,7 @@ def Write_Result(Input: InputStructure, Output: OutputStructure):
 
          with open(general_info, 'w') as f_object:  
             writer = csv.writer(f_object)
-            header = ['name', 'Time', 'Duration', 'Obj','Obj-GNN','Obj-MO','#Q','Size-A','Den-AO%','Cnt-AO', 'Den-AK%','Cnt-AK' ,'Lim','CntX', 'Size-X-x','Size-X-y', 'Size-T-x', 'Size-T-y', 'R']
+            header = ['name', 'Time','TBulding', 'TSolving', 'Obj','Obj-GNN','Obj-MO','#Q','Size-A','Den-AO%','Cnt-AO', 'Den-AK%','Cnt-AK' ,'Lim','CntX', 'Size-X-x','Size-X-y', 'Size-T-x', 'Size-T-y', 'R']
             writer.writerow(header)
             
     # Pre-requisite - The CSV file should be manually closed before running this code.
@@ -65,6 +65,7 @@ def Write_Result(Input: InputStructure, Output: OutputStructure):
         list_data = [
                         Input.Index,    #name
                         dt_string,      #when it solved time
+                        Output.TimeB,
                         Output.Time,    #duration
                         Output.Obj,     #objective function
                         Input.ObjGNN,  #objective function of GNN

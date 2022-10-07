@@ -47,7 +47,7 @@ def BuldingSubProblem(InputDt:InputStructure, HowFar:int = 2, Pos:bool = False):
 
 if __name__ == '__main__':
 
-    NoN = 3 # number of neighbors
+    NoN = 1 # number of neighbors
     Position = True
     InputDt = read_data("cora_p", Pos=Position)
     InputDt.set_R_max(NoN, Find_Neighbour=True)

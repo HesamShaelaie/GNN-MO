@@ -8,6 +8,8 @@ from write_output import Write_Result
 import numpy as np
 from datetime import datetime
 from SubGraph import BuldingSubProblem
+from draw_citation import Draw_Citation_result
+
 
 def Preparation(InputDt:InputStructure):
 
@@ -51,7 +53,7 @@ def TimeAndDate():
 if __name__ == '__main__':
 
     TimeAndDate()
-    InputDt = read_data("cora_1")
+    InputDt = read_data("cora_p_1", Pos=True)
 
     #Preparation(InputDt)
     #------------------------------------------------------------------------------------------
@@ -62,8 +64,8 @@ if __name__ == '__main__':
     
     InputDt.recalculate()
 
-    # InputDt.Lmt = int(InputDt.Lmt * 0.2)
-    InputDt.Lmt = 2
+    InputDt.Lmt = int(InputDt.Lmt * 0.1)
+    #InputDt.Lmt = 2
     InputDt.show()
 
     #------------------------------------------------------------------------------------------
@@ -71,6 +73,11 @@ if __name__ == '__main__':
     OutData = CitationProblem(InputDt)
 
     #------------------------------------------------------------------------------------------
+
+    Draw_Citation_result(InputDt, OutData)
+
+    #------------------------------------------------------------------------------------------
+
     print("GN OBJ: %10.4f"%OutData.Obj)
     print("GN OBJ: %10.4f"%InputDt.ObjGNN)
     print("MO OBJ: %10.4f"%OutData.ObjMO)

@@ -19,6 +19,8 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
     OutData = OutputStructure()
 
     try:
+        begin = time.time()
+        
         # Data input
         N = InputData.n
         Lmt = InputData.Lmt
@@ -77,6 +79,9 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         m.addConstr(gp.quicksum(x[i][j] for i in range(N) for j in range(N)) <= Lmt)
 
         
+        end = time.time()
+        # OutData.ObjMO = 
+        OutData.TimeB = end-begin
         # --------------------------------------------------------------------
         
         # Lazy optimization parameters
@@ -132,9 +137,9 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
 
 if __name__ == '__main__':
 
-    InputDt = read_data("citeseer")
+    InputDt = read_data("cora_p_1")
 
-    InputDt.Lmt = 2
+    InputDt.Lmt = int(InputDt.Lmt * 0.3)
 
     #print('InputDt.Lmt:     %d'%InputDt.Lmt)
     print('InputDt.CntA:    %d'%InputDt.CntA)
