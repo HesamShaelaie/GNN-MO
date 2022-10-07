@@ -8,7 +8,7 @@ from data_structures import OutputStructure
 
 #{'A':engine.model.A, 'A_POW':engine.model.A_pow, 'X': dataloader['val_loader'].xs,  'T':engine.model.theta, 'R':0, 'L':0, 'lat': engine.model.lat, 'lng': engine.model.lng}
 
-def read_data(Index):
+def read_data(Index, Pos:bool = False):
     
     CurrectFolder = os.path.dirname(os.path.abspath(__file__))
     GNNINPUT = CurrectFolder + "/GNNINPUT/CitationData/"
@@ -32,7 +32,12 @@ def read_data(Index):
     X = Info['X']
     T = Info['T']
 
-    InputDt = InputStructure(Index, path_to_file, GNNINPUT, Fname, A, X, T)
+    if Pos == True:
+        P = Info['P']
+        InputDt = InputStructure(Index, path_to_file, GNNINPUT, Fname, A, X, T, P)
+    else:
+        InputDt = InputStructure(Index, path_to_file, GNNINPUT, Fname, A, X, T)
+    
 
     
 

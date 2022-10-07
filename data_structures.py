@@ -2,7 +2,7 @@ import numpy as np
 
 
 class InputStructure():
-    def __init__(self, Index, Path, Folder, Fname, A, X, T) -> None:
+    def __init__(self, Index, Path, Folder, Fname, A, X, T, P = False) -> None:
         self.Index = Index
 
         self.n = np.shape(A)[0]
@@ -58,9 +58,9 @@ class InputStructure():
         self.Folder = Folder
         self.Fname = Fname
 
-        self.Pos = {}
-
-
+        if P != False:
+            self.Pos = P    
+        
         self.Lmt = -1
         self.CntAO = 0
         self.DenAO = 0.0
