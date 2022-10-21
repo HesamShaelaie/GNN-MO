@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.exceptions import PositiveSpectrumWarning
+
 from data_structures import OutputStructure
 from reading_pickles import read_data
 from reading_pickles import InputStructure

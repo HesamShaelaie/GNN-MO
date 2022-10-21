@@ -17,7 +17,6 @@ def Preparation(InputDt:InputStructure):
     InputDt.set_R(tmp)
     InputDt.recalculate()
     InputDt.show()
-
     print("----------------------------------------")
     print(InputDt.FindTheMaxN(5))
     tmp_max = InputDt.FindTheMaxN(5)
@@ -53,18 +52,18 @@ def TimeAndDate():
 if __name__ == '__main__':
 
     TimeAndDate()
-    InputDt = read_data("cora_p_1", Pos=True)
+    InputDt = read_data("cora_p_3", Pos=True)
 
     #Preparation(InputDt)
     #------------------------------------------------------------------------------------------
     
-    InputDt.set_R_max(1, Find_Neighbour=True)
+    InputDt.set_R_max(3, Find_Neighbour=True)
     #InputDt.X = np.full((InputDt.xX, InputDt.yX), 1, dtype = np.float_)
     #InputDt.Theta = np.full((InputDt.xT, InputDt.yT), 1, dtype = np.float_)
     
     InputDt.recalculate()
 
-    InputDt.Lmt = int(InputDt.Lmt * 0.1)
+    InputDt.Lmt = int(InputDt.Lmt * 0.02)
     #InputDt.Lmt = 2
     InputDt.show()
 
@@ -74,7 +73,7 @@ if __name__ == '__main__':
 
     #------------------------------------------------------------------------------------------
 
-    Draw_Citation_result(InputDt, OutData)
+    #Draw_Citation_result(InputDt, OutData)
 
     #------------------------------------------------------------------------------------------
 

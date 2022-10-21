@@ -233,6 +233,7 @@ class OutputStructure():
         self.Obj =0.0
         self.X = any
         self.ObjMO = 0.0
+        self.YYXT = any
         self.Time =0.0
         self.TimeB =0.0
         self.CntX = 0

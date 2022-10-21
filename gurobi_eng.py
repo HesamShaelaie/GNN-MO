@@ -24,6 +24,7 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         # Data input
         N = InputData.n
         Lmt = InputData.Lmt
+        D2 = InputData.yT
 
         # Create a new model
         m = gp.Model("quadratic")
@@ -31,27 +32,28 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         # Variables
         x = m.addMVar(shape=(N,N), vtype=GRB.BINARY, name="x")
         y = m.addMVar(shape=(N,N), vtype=GRB.CONTINUOUS, lb=0, name="y")
-        Upos = m.addVar(vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Upos")
-        Uneg = m.addVar(vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Uneg")
+
+        Upos = m.addVar(shape=(D2), vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Upos")
+        Uneg = m.addVar(shape=(D2), vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Uneg")
         
         # ----------- Set objective ------------------------------------------
-        obj = gp.QuadExpr()
-
-        for s in InputData.sr: #row
-            for k in range(InputData.yT): # column
-                print("Row %-10d Clm %-10d"%(s,k))
+        
+        OutData.NQ = 0
+        for k in range(InputData.yT): # column
+            obj = gp.QuadExpr()
+            for s in InputData.sr: #row
                 for z in range(InputData.xA):
                     for j in range(InputData.yA):
                         obj.add(y[s][j]*y[j][z]*InputData.XT[z][k])
 
-        
-        # Getting the number of quadratic term in objective function
-        OutData.NQ = obj.size()
+            
+            # Getting the number of quadratic term in objective function
+            OutData.NQ += obj.size()
 
-        m.addConstr(obj - InputData.ObjGNN == Upos - Uneg)
+            m.addConstr(obj - InputData.AAXT[k] == Upos[k] - Uneg[k])
 
 
-        m.setObjective(Upos+Uneg , GRB.MINIMIZE)
+        m.setObjective(gp.quicksum(Upos[k]+Uneg[k] for k in range(InputData.yT)) , GRB.MINIMIZE)
 
         m.params.NonConvex = 2
         m.params.MIPFocus = 1
@@ -103,8 +105,9 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         tmp_ObjMO = tmp_ObjMO   @ tmp_ObjMO
         tmp_ObjMO = tmp_ObjMO   @ InputData.X
         tmp_ObjMO = tmp_ObjMO   @ InputData.Theta
+        OutData.YYXT = tmp_ObjMO
+        
         tmp_Obj = 0
-
         for s in InputData.sr:
             for y in range(InputData.yT):
                 tmp_Obj += tmp_ObjMO[s][y]
