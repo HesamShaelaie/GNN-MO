@@ -156,6 +156,14 @@ class InputStructure():
             for y in range(self.yT):
                 self.ObjGNN = self.ObjGNN + self.AAXT[x][y]
 
+        self.CalT = np.full(self.yT, 0, dtype = np.float_)
+        
+        for y in range(self.yT):
+            self.CalT[y] = 0
+            for x in self.sr:
+                self.CalT[y] = self.CalT[y] + self.AAXT[x][y]
+
+
         if self.nr == 1:
             tmp_AAXTR = self.AAXT[self.sr[0],:]           #row of n-d2 = 1 by d2
             tmp_sum = np.full((self.yT, 1), 1, dtype = np.float_)
@@ -237,6 +245,7 @@ class OutputStructure():
         self.Time =0.0
         self.TimeB =0.0
         self.CntX = 0
+        self.ObjT = any
 
     def SetNumberQ(self, tmp: np.int16):
         self.NQ = tmp

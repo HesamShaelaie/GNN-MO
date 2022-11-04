@@ -12,8 +12,6 @@ from arg_parse import wait_key
 from reading_pickles import read_data
 from matrix import compare_matrix_g
 
-
-
 def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False):
     
     OutData = OutputStructure()
@@ -33,8 +31,8 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         x = m.addMVar(shape=(N,N), vtype=GRB.BINARY, name="x")
         y = m.addMVar(shape=(N,N), vtype=GRB.CONTINUOUS, lb=0, name="y")
 
-        Upos = m.addVar(shape=(D2), vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Upos")
-        Uneg = m.addVar(shape=(D2), vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Uneg")
+        Upos = m.addMVar(shape=D2, vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Upos")
+        Uneg = m.addMVar(shape=D2, vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Uneg")
         
         # ----------- Set objective ------------------------------------------
         
@@ -50,7 +48,7 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
             # Getting the number of quadratic term in objective function
             OutData.NQ += obj.size()
 
-            m.addConstr(obj - InputData.AAXT[k] == Upos[k] - Uneg[k])
+            m.addConstr(obj - InputData.CalT[k] == Upos[k] - Uneg[k])
 
 
         m.setObjective(gp.quicksum(Upos[k]+Uneg[k] for k in range(InputData.yT)) , GRB.MINIMIZE)
@@ -112,9 +110,14 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
             for y in range(InputData.yT):
                 tmp_Obj += tmp_ObjMO[s][y]
         
+        ObjT = np.full(InputData.yT, 0, dtype = np.float_)
+        for y in range(InputData.yT):
+            for s in InputData.sr:
+                ObjT[y] += tmp_ObjMO[s][y]
+
         OutData.ObjMO = tmp_Obj
         OutData.Obj = m.objVal
-        print(OutData.ObjMO)
+        OutData.ObjT = ObjT
         print("--------------EndOfComp--------------")
         
 

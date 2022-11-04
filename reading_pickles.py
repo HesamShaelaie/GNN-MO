@@ -39,16 +39,10 @@ def read_data(Index, Pos:bool = False):
     else:
         InputDt = InputStructure(Index, path_to_file, GNNINPUT, Fname, A, X, T)
     
-
-    
-
     return InputDt
-
 
 if __name__ == '__main__':
     InputDt = read_data("citeseer")
-
-
     
 
     #InputDt.show()

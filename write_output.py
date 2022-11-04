@@ -98,3 +98,59 @@ def Write_Result(Input: InputStructure, Output: OutputStructure):
     # put it there
     # close the file
     # details
+
+def Write_Result_Citation(Input: InputStructure, Output: OutputStructure):
+     # general info
+
+    CurrectFolder = os.path.dirname(os.path.abspath(__file__))
+    GNNOUTPUT = CurrectFolder + "/GNNOUTPUT"
+
+    if not os.path.isdir(GNNOUTPUT):
+        os.mkdir(GNNOUTPUT)
+
+    general_info = GNNOUTPUT + '/Results_' + Input.Fname + ".txt"
+
+    now = datetime.now()
+    dt_string = now.strftime("%d-%m-%Y %H-%M-%S")
+
+    with open(general_info, 'w') as f_object:
+
+        # Pass the CSV  file object to the writer() function
+        f_object.write("%-30s%25s\n"%("Time",dt_string))
+        f_object.write("%-30s%25s\n"%("Name",str(Input.Index)))
+        f_object.write("\n\n")
+
+        f_object.write("%-30s%25.2f\n"%("Build time",Output.TimeB))
+        f_object.write("%-30s%25.2f\n"%("Solving time",Output.Time))
+        f_object.write("\n\n")
+
+        f_object.write("%-30s%25d\n"%("Number of quadratic terms",Output.NQ))
+        f_object.write("%-30s%25d\n"%("Number of hub nodes",Input.nr))
+        f_object.write("%-30s%25s\n"%("Size of A",str(Input.xA)+"-"+str(Input.yA)))
+        f_object.write("%-30s%25s\n"%("Size of X",str(Input.xX)+"-"+str(Input.yX)))
+        f_object.write("%-30s%25s\n"%("Size of T",str(Input.xT)+"-"+str(Input.yT)))
+        f_object.write("\n\n")
+
+        f_object.write("%-30s%25d\n"%("Number of edges in original A",Input.CntAO))
+        f_object.write("%-30s%25d\n"%("Number of edges in midified A",Input.CntAK))
+        f_object.write("%-30s%25d\n"%("Limit on edges",Input.Lmt))
+        f_object.write("%-30s%25d\n"%("Number of edges used",Output.CntX))
+        f_object.write("\n\n")
+
+        f_object.write("%-30s%25.8f\n"%("Objective of Gurobi",Output.Obj))
+        f_object.write("%-30s%25.8f\n"%("Sum over Obj-GNN",Input.ObjGNN))
+        f_object.write("%-30s%25.8f\n"%("Sum over Obj-MO",Output.ObjMO))
+
+        tmpSum = 0
+        for y in range(Input.yT):
+            tmpSum += abs(Input.CalT[y] - Output.ObjT[y])
+            f_object.write("ObjGNN[%d] - ObjMO[%d] =  %10.8f - %10.8f and Total %10.8f\n"%(y,y,Input.CalT[y],Output.ObjT[y],tmpSum))
+         
+        f_object.close()
+
+    # check if the general info exist if
+    # create folder
+    # create the file
+    # put it there
+    # close the file
+    # details    

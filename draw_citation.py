@@ -1,5 +1,5 @@
 import numpy as np
-
+from sklearn.exceptions import PositiveSpectrumWarning
 from data_structures import OutputStructure
 from reading_pickles import read_data
 from reading_pickles import InputStructure
@@ -112,10 +112,6 @@ def Draw_Citation_result(InputDt:InputStructure, Output:OutputStructure):
                 edgelistc.append(edge_colors[0])
                 edgelistw.append(0.1)
 
-            
-
-    
-
     nodelist = [x for x in range(InputDt.n)]
     G = nx.Graph()
 
@@ -173,8 +169,6 @@ def Draw_Citation_result(InputDt:InputStructure, Output:OutputStructure):
 
     plt.savefig(FNAMEO, dpi=900)
     plt.clf()
-
-
 
 
 if __name__ == '__main__':
