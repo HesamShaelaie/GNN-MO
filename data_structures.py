@@ -99,12 +99,12 @@ class InputStructure():
         self.sr = tmp
         self.nr = np.shape(tmp)[0]
     
-    def set_R_max(self, HowMany: int = 1, Find_Neighbour:bool = True):
+    def set_R_max(self, HowMany: int = 1, Find_Neighbour:bool = True, shift: int = 0):
 
         if Find_Neighbour == True:
-            tmp_R = self.FindTheMaxN(HowMany= HowMany)
+            tmp_R = self.FindTheMaxN(HowMany= HowMany,shift= shift)
         else:
-            tmp_R = self.ArgNeighbourMax[:HowMany]
+            tmp_R = self.ArgNeighbourMax[shift:HowMany+shift]
         
         self.sr = tmp_R
         self.nr = HowMany
@@ -217,7 +217,8 @@ class InputStructure():
         #print("%-20s %-15s"%("size of XTW:   ", self.XTW.shape))
         print("===============================================")
 
-    def FindTheMaxN(self, HowMany:int = 1):
+    def FindTheMaxN(self, HowMany:int = 1, shift:int = 0):
+
         self.Neighbours = np.zeros(self.n, dtype=int)
 
         for x in range(self.n):
@@ -226,11 +227,12 @@ class InputStructure():
                 if self.CopyA[x][y]>0.1:
                     cnt = cnt + 1
             self.Neighbours[x] = cnt
-
+        
+        
         self.ArgNeighbourMax = np.argsort(self.Neighbours)
         self.ArgNeighbourMax = np.flip(self.ArgNeighbourMax)
 
-        return self.ArgNeighbourMax[:HowMany]
+        return self.ArgNeighbourMax[shift:HowMany+shift]
 
         
 

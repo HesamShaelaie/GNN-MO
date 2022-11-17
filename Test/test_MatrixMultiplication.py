@@ -24,13 +24,9 @@ y = 3
 A[x][y] = 1
 
 
-x = 1
-y = 3
-A[x][y] = 1
-
-
 B = A@A
 C = B@B
+print(A)
 print(B)
 print(C)
 

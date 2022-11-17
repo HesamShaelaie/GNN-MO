@@ -1,0 +1,57 @@
+Time                                04-11-2022 08-54-09
+Name                                           cora_p_5
+
+
+Build time                                       312.86
+Solving time                                       2.34
+
+
+Number of quadratic terms                      10897740
+Number of hub nodes                                   5
+Size of A                                       558-558
+Size of X                                      558-1433
+Size of T                                        1433-7
+
+
+Number of edges in original A                      2266
+Number of edges in midified A                      2266
+Limit on edges                                       10
+Number of edges used                                 10
+
+
+Objective of Gurobi                      29678.60217028
+Sum over Obj-GNN                        -21646.66723215
+Sum over Obj-MO                          -4296.12896481
+ObjGNN[0] - ObjMO[0] =  -3528.73567386 - -867.92707678 and Total 2660.80859708
+ObjGNN[1] - ObjMO[1] =  8660.09302410 - 2496.06111516 and Total 8824.84050603
+ObjGNN[2] - ObjMO[2] =  -8052.18943276 - -1483.92653267 and Total 15393.10340612
+ObjGNN[3] - ObjMO[3] =  -1598.39577150 - -836.86888439 and Total 16154.63029323
+ObjGNN[4] - ObjMO[4] =  -5580.02442056 - -1873.64185953 and Total 19861.01285426
+ObjGNN[5] - ObjMO[5] =  -3808.11480840 - -511.65115307 and Total 23157.47650959
+ObjGNN[6] - ObjMO[6] =  -7739.30014918 - -1218.17457353 and Total 29678.60208523
+
+
+======================
+
+Y[   66][  163] = 1
+Y[   66][  362] = 1
+Y[  163][   66] = 1
+Y[  163][  325] = 1
+Y[  163][  386] = 1
+Y[  325][  163] = 1
+Y[  325][  362] = 1
+Y[  362][   66] = 1
+Y[  362][  325] = 1
+Y[  386][  163] = 1
+
+
+======================
+
+Y[   66][  325] = 2.0000
+Y[   66][  386] = 1.0000
+Y[  163][  362] = 2.0000
+Y[  325][   66] = 2.0000
+Y[  325][  386] = 1.0000
+Y[  362][  163] = 2.0000
+Y[  386][   66] = 1.0000
+Y[  386][  325] = 1.0000

@@ -50,31 +50,29 @@ def TimeAndDate():
     print(now)
     print(dt_string)
 
-
-
 if __name__ == '__main__':
 
     TimeAndDate()
-    InputDt = read_data("cora_p_1", Pos=True)
+    InputDt = read_data("cora_p_5", Pos=True)
 
     #Preparation(InputDt)
     #------------------------------------------------------------------------------------------
     
-    InputDt.set_R_max(1, Find_Neighbour=True)
+    InputDt.set_R_max(5, Find_Neighbour=True)
     #InputDt.X = np.full((InputDt.xX, InputDt.yX), 1, dtype = np.float_)
     #InputDt.Theta = np.full((InputDt.xT, InputDt.yT), 1, dtype = np.float_)
     
     InputDt.recalculate()
 
     InputDt.Lmt = int(InputDt.Lmt * 0.1)
-    #InputDt.Lmt = 2
+    #InputDt.Lmt = 10
     InputDt.show()
 
     #------------------------------------------------------------------------------------------
 
     OutData = CitationProblem(InputDt)
 
-    exit()
+    #exit()
     #------------------------------------------------------------------------------------------
 
     Draw_Citation_result(InputDt, OutData)

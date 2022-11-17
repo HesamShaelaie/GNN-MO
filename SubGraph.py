@@ -39,18 +39,14 @@ def BuldingSubProblem(InputDt:InputStructure, HowFar:int = 2, Pos:bool = False):
         NewData.set_P(New_Pos)
     else:
         NewData = InputStructure(InputDt.Index, InputDt.Path, InputDt.Folder, InputDt.Fname, New_A, New_X, InputDt.Theta)
-
     return NewData
-
-                
-
 
 if __name__ == '__main__':
 
-    NoN = 1 # number of neighbors
+    NoN = 5 # number of neighbors
     Position = True
     InputDt = read_data("cora_p", Pos=Position)
-    InputDt.set_R_max(NoN, Find_Neighbour=True)
+    InputDt.set_R_max(NoN, Find_Neighbour=True, shift=4)
     InputDt.recalculate()
     InputDt.show()
 
@@ -58,7 +54,6 @@ if __name__ == '__main__':
     InputDt.set_R_max(NoN, Find_Neighbour=True)
     InputDt.recalculate()
     InputDt.show()
-
 
     path_to_file = "%s%s_%d.pkl"%(InputDt.Folder, InputDt.Index, NoN)
     out = open(path_to_file,'wb')

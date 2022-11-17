@@ -146,6 +146,22 @@ def Write_Result_Citation(Input: InputStructure, Output: OutputStructure):
             tmpSum += abs(Input.CalT[y] - Output.ObjT[y])
             f_object.write("ObjGNN[%d] - ObjMO[%d] =  %10.8f - %10.8f and Total %10.8f\n"%(y,y,Input.CalT[y],Output.ObjT[y],tmpSum))
          
+        f_object.write("\n\n======================\n\n")
+
+
+        
+        for x in range(Input.xA):
+            for y in range(Input.yA):
+                if Output.X[x][y]>0.5:
+                    f_object.write("Y[%5d][%5d] = 1\n"%(x,y))
+
+        f_object.write("\n\n======================\n\n")
+        tmpY = Output.X @ Output.X
+        for x in range(Input.xA):
+            for y in range(Input.yA):
+                if tmpY[x][y]>0.5 and x!=y:
+                    f_object.write("Y[%5d][%5d] = %.4f\n"%(x,y,tmpY[x][y]))
+
         f_object.close()
 
     # check if the general info exist if
