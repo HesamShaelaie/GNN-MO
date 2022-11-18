@@ -89,7 +89,7 @@ if __name__ == '__main__':
     if Gmodel == Gngine.GurobiV3: 
         #InputDt.Lmt = int(InputDt.n)
         InputDt.BinariseTheMatrix()
-        InputDt.Lmt = 10
+        InputDt.Lmt = InputDt.n
 
     
     #InputDt.Lmt = 10

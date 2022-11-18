@@ -32,6 +32,7 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         # Variables
         x = m.addMVar(shape=(N,N), vtype=GRB.BINARY, name="x")
         y = m.addMVar(shape=(N,N), vtype=GRB.CONTINUOUS, lb=0, name="y")
+
         q = m.addMVar(shape= N, vtype=GRB.BINARY, name="q")
         p = m.addMVar(shape=(NR,D2), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub = GRB.INFINITY, name="p")
         g = m.addMVar(shape= NR, vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub = GRB.INFINITY, name="g")
@@ -67,9 +68,8 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
                 m.addConstr(p[s][k]+ 9000000*(1-b[s][k]) >= g[s])
 
         for s in range(InputData.nr): #row
-            m.addConstr(gp.quicksum(b[s][k] for k in range(D2))==1)
+            m.addConstr(gp.quicksum(b[s][k] for k in range(D2)) == 1)
         # ---------------------------------------------------------------------
-
 
         for s in range(InputData.nr): #row
             ts = InputData.sr[s]
@@ -77,7 +77,7 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
                 m.addConstr(b[s][k] - InputData.BAAXT[ts][k] == Upos[s][k] - Uneg[s][k])
 
 
-        m.setObjective(gp.quicksum(Upos[s][k]+Uneg[s][k] for s in range(InputData.nr) for k in range(InputData.yT)) , GRB.MINIMIZE)
+        m.setObjective(gp.quicksum(q[n] for n in range(NR)), GRB.MINIMIZE)
 
         m.params.NonConvex = 2
         m.params.MIPFocus = 1
@@ -87,8 +87,6 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         
         # Adding constraints
         # Constraint (1)
-
-
         for i in range(N):
             for j in range(N):
                 m.addConstr(x[i][j]*InputData.A[i][j] == y[i][j])
@@ -102,7 +100,6 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         
         
         # Constraint (3)
-        
         for n in range(N):
             m.addConstr(gp.quicksum(x[n][j] for j in range(N)) <= 3*N*q[n])
 
@@ -110,9 +107,6 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
             m.addConstr(gp.quicksum(x[j][n] for j in range(N)) <= 3*N*q[n])
 
         m.addConstr(gp.quicksum(q[n] for n in range(N)) <= Lmt)
-        
-
-        # max constraint
         
         end = time.time()
         # OutData.ObjMO = 
@@ -169,6 +163,14 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
 
         OutData.ObjMO = tmp_Obj
         OutData.Obj = m.objVal
+        
+        print("--------------EndOfComp--------------")
+        print("--------------EndOfComp--------------")
+        print("--------------EndOfComp--------------")
+        print(m.objVal)
+        print("--------------EndOfComp--------------")
+        print("--------------EndOfComp--------------")
+        print("--------------EndOfComp--------------")
         OutData.ObjT = ObjT
         InputData.ObjGNN = tmp_GNN
         InputData.CalT = CalT

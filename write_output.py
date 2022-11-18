@@ -157,12 +157,12 @@ def Write_Result_Citation(Input: InputStructure, Output: OutputStructure, Gtype:
         f_object.write("\n\n======================\n\n")
 
         
-        if Gtype == Gngine.GurobiV2 or Gtype == Gngine.GurobiV3:
-            for n in range(Input.n):
-                if Output.q[n]>0.5:
-                    f_object.write("q[%5d]= %.4f\n"%(n,1))
+        
+        for n in range(Input.n):
+            if Output.q[n]>0.5:
+                f_object.write("q[%5d]= %.4f\n"%(n,1))
 
-            f_object.write("\n\n======================\n\n")
+        f_object.write("\n\n======================\n\n")
         
         for x in range(Input.xA):
             for y in range(Input.yA):
