@@ -23,6 +23,7 @@ def Gurobi_Solve(InputData: InputStructure, UndirectionalConstraint: bool =False
         N = InputData.n
         Lmt = InputData.Lmt
         D2 = InputData.yT
+        
 
         # Create a new model
         m = gp.Model("quadratic")

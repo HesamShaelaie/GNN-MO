@@ -234,7 +234,25 @@ class InputStructure():
 
         return self.ArgNeighbourMax[shift:HowMany+shift]
 
+    def BinariseTheMatrix(self):        
+        self.BAAXT = np.full((self.xA, self.yT), 0, dtype = np.float_)
+
+        if self.AAXT.shape[0] != self.BAAXT.shape[0] or self.AAXT.shape[1] != self.BAAXT.shape[1]:
+            print("self.AAXT.shape[0] != self.BAAXT.shape[0]")
+            exit(55)
+
+        for n in range(self.n):
+            tmp = np.argmax(self.BAAXT[n])
+            self.BAAXT [n][tmp] = 1
         
+        print("self.BAAXT.sum() = " + str(self.BAAXT.sum()))
+
+        self.ObjGNN = 0
+        for x in self.sr:
+            for y in range(self.yT):
+                self.ObjGNN = self.ObjGNN + self.BAAXT[x][y]
+
+
 
 class OutputStructure():
     
@@ -248,6 +266,8 @@ class OutputStructure():
         self.TimeB =0.0
         self.CntX = 0
         self.ObjT = any
+        self.q = any
+        self.cntq = 0
 
     def SetNumberQ(self, tmp: np.int16):
         self.NQ = tmp

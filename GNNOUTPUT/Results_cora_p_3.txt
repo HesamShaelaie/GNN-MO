@@ -1,0 +1,24 @@
+Time                                18-11-2022 02-25-58
+Name                                           cora_p_3
+
+
+Build time                                       353.28
+Solving time                                       0.69
+
+
+Number of quadratic terms                       1529388
+Number of hub nodes                                   3
+Size of A                                       714-714
+Size of X                                      714-1433
+Size of T                                        1433-7
+
+
+Number of edges in original A                      3048
+Number of edges in midified A                      3048
+Limit on edges                                       71
+Number of edges used                                  0
+
+
+Objective of Gurobi                          0.00000000
+Sum over Obj-GNN                        -72934.08882013
+Sum over Obj-MO                              0.00000000

@@ -2,7 +2,9 @@ from os import uname
 from reading_pickles import InputStructure
 from reading_pickles import OutputStructure
 from reading_pickles import read_data
-from gurobi_eng import Gurobi_Solve
+from gurobi_eng_V1 import Gurobi_Solve
+from gurobi_eng_V2 import Gurobi_Solve_LF_ABS
+from gurobi_eng_V3 import Gurobi_Solve_LF_ABS_B
 from write_output import Write_Result
 from write_output import Write_Result_Citation
 #from draw_graphs import Draw_Picture
@@ -10,6 +12,12 @@ import numpy as np
 from datetime import datetime
 from SubGraph import BuldingSubProblem
 from draw_citation import Draw_Citation_result
+from enum import Enum
+
+class Gngine(Enum):
+    GurobiV1 = 1
+    GurobiV2 = 2
+    GurobiV3 = 3
 
 
 def Preparation(InputDt:InputStructure):
@@ -30,15 +38,22 @@ def Preparation(InputDt:InputStructure):
     InputDt.show()
 
 
-def CitationProblem(InputDt:InputStructure):
+def CitationProblem(InputDt:InputStructure, Gtype:Gngine):
 
-    ResultDt = Gurobi_Solve(InputDt, UndirectionalConstraint = True)
+    if Gtype == Gngine.GurobiV1:
+        ResultDt = Gurobi_Solve(InputDt, UndirectionalConstraint = True)
+        
+    if Gtype == Gngine.GurobiV2:
+        ResultDt = Gurobi_Solve_LF_ABS(InputDt, UndirectionalConstraint = True)
+
+    if Gtype == Gngine.GurobiV3:
+        ResultDt = Gurobi_Solve_LF_ABS_B(InputDt, UndirectionalConstraint = True)
 
     print(ResultDt.Time)
     print("Problem solved")
     
     Write_Result(InputDt, ResultDt)
-    Write_Result_Citation(InputDt, ResultDt)
+    Write_Result_Citation(InputDt, ResultDt, Gtype=Gtype)
     return ResultDt
     #Draw_Picture(InputDt, ResultDt, WithOld=False, YUE= True)
 
@@ -53,24 +68,36 @@ def TimeAndDate():
 if __name__ == '__main__':
 
     TimeAndDate()
-    InputDt = read_data("cora_p_5", Pos=True)
-
+    InputDt = read_data("cora_p_1", Pos=True)
+    Gmodel = Gngine.GurobiV3
     #Preparation(InputDt)
     #------------------------------------------------------------------------------------------
     
-    InputDt.set_R_max(5, Find_Neighbour=True)
+    InputDt.set_R_max(1, Find_Neighbour=True)
     #InputDt.X = np.full((InputDt.xX, InputDt.yX), 1, dtype = np.float_)
     #InputDt.Theta = np.full((InputDt.xT, InputDt.yT), 1, dtype = np.float_)
     
     InputDt.recalculate()
 
-    InputDt.Lmt = int(InputDt.Lmt * 0.1)
+    if Gmodel == Gngine.GurobiV1: 
+        InputDt.Lmt = int(InputDt.Lmt * 0.1)
+
+    if Gmodel == Gngine.GurobiV2: 
+        #InputDt.Lmt = int(InputDt.n)
+        InputDt.Lmt = 10
+
+    if Gmodel == Gngine.GurobiV3: 
+        #InputDt.Lmt = int(InputDt.n)
+        InputDt.BinariseTheMatrix()
+        InputDt.Lmt = 10
+
+    
     #InputDt.Lmt = 10
     InputDt.show()
 
     #------------------------------------------------------------------------------------------
 
-    OutData = CitationProblem(InputDt)
+    OutData = CitationProblem(InputDt, Gtype = Gmodel)
 
     #exit()
     #------------------------------------------------------------------------------------------

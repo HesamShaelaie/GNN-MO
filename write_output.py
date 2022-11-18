@@ -2,6 +2,12 @@ from data_structures import InputStructure
 from data_structures import OutputStructure
 import os
 from datetime import datetime
+from enum import Enum
+
+class Gngine(Enum):
+    GurobiV1 = 1
+    GurobiV2 = 2
+    GurobiV3 = 3
 
 import csv 
 
@@ -99,7 +105,7 @@ def Write_Result(Input: InputStructure, Output: OutputStructure):
     # close the file
     # details
 
-def Write_Result_Citation(Input: InputStructure, Output: OutputStructure):
+def Write_Result_Citation(Input: InputStructure, Output: OutputStructure, Gtype:Gngine):
      # general info
 
     CurrectFolder = os.path.dirname(os.path.abspath(__file__))
@@ -133,13 +139,15 @@ def Write_Result_Citation(Input: InputStructure, Output: OutputStructure):
 
         f_object.write("%-30s%25d\n"%("Number of edges in original A",Input.CntAO))
         f_object.write("%-30s%25d\n"%("Number of edges in midified A",Input.CntAK))
-        f_object.write("%-30s%25d\n"%("Limit on edges",Input.Lmt))
+        f_object.write("%-30s%25d\n"%("Limit",Input.Lmt))
+        f_object.write("%-30s%25d\n"%("Sum over q",Output.cntq))
         f_object.write("%-30s%25d\n"%("Number of edges used",Output.CntX))
         f_object.write("\n\n")
 
         f_object.write("%-30s%25.8f\n"%("Objective of Gurobi",Output.Obj))
         f_object.write("%-30s%25.8f\n"%("Sum over Obj-GNN",Input.ObjGNN))
         f_object.write("%-30s%25.8f\n"%("Sum over Obj-MO",Output.ObjMO))
+        
 
         tmpSum = 0
         for y in range(Input.yT):
@@ -148,12 +156,26 @@ def Write_Result_Citation(Input: InputStructure, Output: OutputStructure):
          
         f_object.write("\n\n======================\n\n")
 
+        
+        if Gtype == Gngine.GurobiV2 or Gtype == Gngine.GurobiV3:
+            for n in range(Input.n):
+                if Output.q[n]>0.5:
+                    f_object.write("q[%5d]= %.4f\n"%(n,1))
 
+            f_object.write("\n\n======================\n\n")
         
         for x in range(Input.xA):
             for y in range(Input.yA):
                 if Output.X[x][y]>0.5:
-                    f_object.write("Y[%5d][%5d] = 1\n"%(x,y))
+                    f_object.write("Y[%5d][%5d] = %.4f\n"%(x,y,Output.X[x][y]))
+
+        f_object.write("\n\n======================\n\n")
+        tmpY = Output.X @ Output.X
+        for x in range(Input.xA):
+            for y in range(Input.yA):
+                if tmpY[x][y]>0.5 and x!=y:
+                    f_object.write("Y[%5d][%5d] = %.4f\n"%(x,y,tmpY[x][y]))
+
 
         f_object.write("\n\n======================\n\n")
         tmpY = Output.X @ Output.X
