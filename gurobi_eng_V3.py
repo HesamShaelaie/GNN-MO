@@ -24,7 +24,6 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         Lmt = InputData.Lmt
         D2 = InputData.yT
         NR = InputData.nr
-        
 
         # Create a new model
         m = gp.Model("quadratic")
@@ -34,9 +33,11 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         y = m.addMVar(shape=(N,N), vtype=GRB.CONTINUOUS, lb=0, name="y")
 
         q = m.addMVar(shape= N, vtype=GRB.BINARY, name="q")
+
         p = m.addMVar(shape=(NR,D2), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub = GRB.INFINITY, name="p")
-        g = m.addMVar(shape= NR, vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub = GRB.INFINITY, name="g")
         b = m.addMVar(shape=(NR,D2), vtype=GRB.BINARY, name="b")
+        g = m.addMVar(shape= NR, vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub = GRB.INFINITY, name="g")
+
         Upos = m.addMVar(shape=(NR,D2), vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Upos")
         Uneg = m.addMVar(shape=(NR,D2), vtype=GRB.CONTINUOUS,lb=0, ub = GRB.INFINITY, name="Uneg")
         
@@ -62,10 +63,8 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         for s in range(InputData.nr): #row
             for k in range(InputData.yT): # column
                 m.addConstr(p[s][k] <= g[s])
-
-        for s in range(InputData.nr): #row
-            for k in range(InputData.yT): # column
                 m.addConstr(p[s][k]+ 9000000*(1-b[s][k]) >= g[s])
+
 
         for s in range(InputData.nr): #row
             m.addConstr(gp.quicksum(b[s][k] for k in range(D2)) == 1)
@@ -142,8 +141,6 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         tmp_ObjMO = tmp_ObjMO   @ InputData.Theta
         OutData.YYXT = tmp_ObjMO
         
-        
-
         tmp_Obj = 0
         tmp_GNN = 0
         for s in InputData.sr:
@@ -151,19 +148,22 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
                 tmp_Obj += tmp_ObjMO[s][y]
                 tmp_GNN += InputData.BAAXT[s][y]
         
-        
+        OutData.ObjMO = tmp_Obj
+        InputData.ObjGNN = tmp_GNN
+        OutData.Obj = m.objVal
+
+
         ObjT = np.full(InputData.yT, 0, dtype = np.float_)
         CalT = np.full(InputData.yT, 0, dtype = np.float_)
 
         for y in range(InputData.yT):
             for s in InputData.sr:
-                ObjT[y] += tmp_ObjMO[s][y]
+                ObjT[y] += OutData.YYXT[s][y]
                 CalT[y] += InputData.BAAXT[s][y]
         
+        OutData.ObjT = ObjT
+        InputData.CalT = CalT
 
-        OutData.ObjMO = tmp_Obj
-        OutData.Obj = m.objVal
-        
         print("--------------EndOfComp--------------")
         print("--------------EndOfComp--------------")
         print("--------------EndOfComp--------------")
@@ -171,10 +171,6 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         print("--------------EndOfComp--------------")
         print("--------------EndOfComp--------------")
         print("--------------EndOfComp--------------")
-        OutData.ObjT = ObjT
-        InputData.ObjGNN = tmp_GNN
-        InputData.CalT = CalT
-
         print("--------------EndOfComp--------------")
         OutData.CntX = 0
         for x in range(InputData.n):

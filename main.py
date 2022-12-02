@@ -91,6 +91,7 @@ if __name__ == '__main__':
         InputDt.BinariseTheMatrix()
         InputDt.Lmt = InputDt.n
 
+
     
     #InputDt.Lmt = 10
     InputDt.show()
@@ -102,7 +103,7 @@ if __name__ == '__main__':
     #exit()
     #------------------------------------------------------------------------------------------
 
-    Draw_Citation_result(InputDt, OutData)
+    #Draw_Citation_result(InputDt, OutData)
 
     #------------------------------------------------------------------------------------------
 

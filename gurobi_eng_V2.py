@@ -51,7 +51,7 @@ def Gurobi_Solve_LF_ABS(InputData: InputStructure, UndirectionalConstraint: bool
                 # Getting the number of quadratic term in objective function
                 OutData.NQ += obj.size()
 
-                m.addConstr(obj - InputData.AAXT[ts][k] == Upos[s][k] - Uneg[s][k])
+                m.addConstr(obj - InputData.AAXT[ts][k] == Upos[s][k] + Uneg[s][k])
 
 
         m.setObjective(gp.quicksum(Upos[s][k]+Uneg[s][k] for s in range(InputData.nr) for k in range(InputData.yT)) , GRB.MINIMIZE)

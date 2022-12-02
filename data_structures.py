@@ -242,16 +242,18 @@ class InputStructure():
             exit(55)
 
         for n in range(self.n):
-            tmp = np.argmax(self.BAAXT[n])
+            tmp = np.argmax(self.AAXT[n])
             self.BAAXT [n][tmp] = 1
         
-        print("self.BAAXT.sum() = " + str(self.BAAXT.sum()))
+        
 
         self.ObjGNN = 0
         for x in self.sr:
             for y in range(self.yT):
                 self.ObjGNN = self.ObjGNN + self.BAAXT[x][y]
 
+        print("self.BAAXT.sum() = " + str(self.BAAXT.sum()))
+        print("self.ObjGNN = " + str(self.ObjGNN))
 
 
 class OutputStructure():

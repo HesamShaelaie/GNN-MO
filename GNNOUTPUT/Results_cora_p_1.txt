@@ -1,9 +1,9 @@
-Time                                18-11-2022 12-27-54
+Time                                02-12-2022 01-39-54
 Name                                           cora_p_1
 
 
-Build time                                        42.86
-Solving time                                       0.73
+Build time                                        41.36
+Solving time                                       0.71
 
 
 Number of quadratic terms                       1270332
@@ -23,13 +23,13 @@ Number of edges used                                258
 Objective of Gurobi                          0.00000000
 Sum over Obj-GNN                             1.00000000
 Sum over Obj-MO                        -195658.21695951
-ObjGNN[0] - ObjMO[0] =  1.00000000 - -43393.15132834 and Total 43394.15132834
-ObjGNN[1] - ObjMO[1] =  0.00000000 - -6235.98841134 and Total 49630.13973968
-ObjGNN[2] - ObjMO[2] =  0.00000000 - 29948.16513461 and Total 79578.30487428
-ObjGNN[3] - ObjMO[3] =  0.00000000 - -9579.13861730 and Total 89157.44349158
-ObjGNN[4] - ObjMO[4] =  0.00000000 - -68544.87591343 and Total 157702.31940500
-ObjGNN[5] - ObjMO[5] =  0.00000000 - -41910.15769427 and Total 199612.47709928
-ObjGNN[6] - ObjMO[6] =  0.00000000 - -55943.07012944 and Total 255555.54722872
+ObjGNN[0] - ObjMO[0] =  0.00000000 - -43393.15132834 and Total 43393.15132834
+ObjGNN[1] - ObjMO[1] =  0.00000000 - -6235.98841134 and Total 49629.13973968
+ObjGNN[2] - ObjMO[2] =  1.00000000 - 29948.16513461 and Total 79576.30487428
+ObjGNN[3] - ObjMO[3] =  0.00000000 - -9579.13861730 and Total 89155.44349158
+ObjGNN[4] - ObjMO[4] =  0.00000000 - -68544.87591343 and Total 157700.31940500
+ObjGNN[5] - ObjMO[5] =  0.00000000 - -41910.15769427 and Total 199610.47709928
+ObjGNN[6] - ObjMO[6] =  0.00000000 - -55943.07012944 and Total 255553.54722872
 
 
 ======================
