@@ -270,6 +270,8 @@ class OutputStructure():
         self.ObjT = any
         self.q = any
         self.cntq = 0
+        self.NX= any
+        self.PX= any
 
     def SetNumberQ(self, tmp: np.int16):
         self.NQ = tmp

@@ -153,6 +153,17 @@ def Write_Result_Citation(Input: InputStructure, Output: OutputStructure, Gtype:
         for y in range(Input.yT):
             tmpSum += abs(Input.CalT[y] - Output.ObjT[y])
             f_object.write("ObjGNN[%d] - ObjMO[%d] =  %10.8f - %10.8f and Total %10.8f\n"%(y,y,Input.CalT[y],Output.ObjT[y],tmpSum))
+
+        f_object.write("\n\n======================\n\n")
+
+        tmpSum = 0
+        for s in range(Input.nr):
+            for k in range(Input.yT):
+                tmpSum += abs(Output.PX[s][k]-Output.NX[s][k])
+                f_object.write("PX[%d][%d] - NX[%d][%d] =  %10.8f - %10.8f and Total %10.8f\n"%(s,k, s,k ,Output.PX[s][k], Output.NX[s][k], tmpSum))
+
+
+
          
         f_object.write("\n\n======================\n\n")
 
@@ -167,7 +178,7 @@ def Write_Result_Citation(Input: InputStructure, Output: OutputStructure, Gtype:
         for x in range(Input.xA):
             for y in range(Input.yA):
                 if Output.X[x][y]>0.5:
-                    f_object.write("Y[%5d][%5d] = %.4f\n"%(x,y,Output.X[x][y]))
+                    f_object.write("X[%5d][%5d] = %.4f\n"%(x,y,Output.X[x][y]))
 
         f_object.write("\n\n======================\n\n")
         tmpY = Output.X @ Output.X

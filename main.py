@@ -92,7 +92,6 @@ if __name__ == '__main__':
         InputDt.Lmt = InputDt.n
 
 
-    
     #InputDt.Lmt = 10
     InputDt.show()
 
@@ -107,10 +106,11 @@ if __name__ == '__main__':
 
     #------------------------------------------------------------------------------------------
 
-    print("GN OBJ: %10.4f"%OutData.Obj)
+    print("GR OBJ: %10.4f"%OutData.Obj)
     print("GN OBJ: %10.4f"%InputDt.ObjGNN)
     print("MO OBJ: %10.4f"%OutData.ObjMO)
     print("MO #Edge : %d"%OutData.CntX)
+    print("MO #q : %d"%OutData.cntq)
     
 
 

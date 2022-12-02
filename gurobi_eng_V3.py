@@ -73,10 +73,11 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         for s in range(InputData.nr): #row
             ts = InputData.sr[s]
             for k in range(InputData.yT): # column
-                m.addConstr(b[s][k] - InputData.BAAXT[ts][k] == Upos[s][k] - Uneg[s][k])
+                m.addConstr(p[s][k] - InputData.BAAXT[ts][k] == Upos[s][k] - Uneg[s][k])
 
 
-        m.setObjective(gp.quicksum(q[n] for n in range(NR)), GRB.MINIMIZE)
+        #m.setObjective(gp.quicksum(q[n] for n in range(NR)), GRB.MINIMIZE)
+        m.setObjective(gp.quicksum(Upos[s][k] - Uneg[s][k] for s in range(NR) for k in range(D2)), GRB.MINIMIZE)
 
         m.params.NonConvex = 2
         m.params.MIPFocus = 1
@@ -145,7 +146,7 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         tmp_GNN = 0
         for s in InputData.sr:
             for y in range(InputData.yT):
-                tmp_Obj += tmp_ObjMO[s][y]
+                tmp_Obj += OutData.YYXT[s][y]
                 tmp_GNN += InputData.BAAXT[s][y]
         
         OutData.ObjMO = tmp_Obj
@@ -163,6 +164,8 @@ def Gurobi_Solve_LF_ABS_B(InputData: InputStructure, UndirectionalConstraint: bo
         
         OutData.ObjT = ObjT
         InputData.CalT = CalT
+        OutData.NX = Uneg.X
+        OutData.PX = Upos.X
 
         print("--------------EndOfComp--------------")
         print("--------------EndOfComp--------------")
